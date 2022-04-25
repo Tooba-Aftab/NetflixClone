@@ -11,29 +11,27 @@ var moviesList = null;
 
 displayMoviesList();
 
-function getMoviesList(element,index){
-    return element.movies?.map(currentElement => {
+function getMoviesList(element,categoryIndex){
+    return element.movies?.map((currentElement, movieIndex) => {
         return `<div class="card-img col-md-2 mb-2 bg-dark">
         <img src="${currentElement.image}" data-toggle="modal" data-target="#movieModal" 
-        onclick="viewDetails(${index},'${currentElement.id}')"/>
+        onclick="viewDetails(${categoryIndex},${movieIndex})"/>
         </div>`;
     }).join("");
 }
 
 async function displayMoviesList() {
     moviesList = await getMovies();
-    const displayMovies = moviesList?.map((currentElement,index) => {
+    const displayMovies = moviesList?.map((currentElement,categoryIndex) => {
         return `<h2>${currentElement.category}</h2>
-    <div class="d-flex flex-row flex-wrap"> ${getMoviesList(currentElement,index)} </div>`;
+    <div class="d-flex flex-row flex-wrap"> ${getMoviesList(currentElement,categoryIndex)} </div>`;
     }).join("");
 
     movies.innerHTML = displayMovies;
 }
 
-function viewDetails(index,id) {
-   const movieDetails = (moviesList[index].movies.find((item) => item.id == id));
-   const { image,title, release_date, overview} = movieDetails;
-
+function viewDetails(categoryIndex,movieIndex) {
+    const {title,image, release_date, overview} = moviesList[categoryIndex].movies[movieIndex];
     modal.innerHTML = `<div class="modal-dialog modal-lg" role="document">  
     <div class="modal-content">
       <div class="modal-header">
